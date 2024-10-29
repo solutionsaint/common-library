@@ -1,5 +1,6 @@
 package com.techlambda.common.ui
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -36,10 +38,16 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +56,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.techlambda.attendanceapp.ui.common.ImageSelectionDialog
+import com.techlambda.common.R
 
 @Composable
 fun CardText(
@@ -123,26 +133,49 @@ fun CommonButton(
 }
 
 @Composable
-fun NetworkImage(
-    imageUrl: String,
-    modifier: Modifier = Modifier,
+fun CustomImage(
+    imageUrl: String? = null,
+    placeholder: ImageVector = Icons.Default.Image,
+    modifier: Modifier = Modifier
+        .size(80.dp),
     contentScale: ContentScale = ContentScale.Fit,
+    isEditEnabled: Boolean = true,
+    onImageSelected: (Uri?) -> Unit
 ) {
+    var showPopup by remember { mutableStateOf(false) }
+    var imageUri by remember { mutableStateOf(imageUrl) }
     Box(modifier = modifier) {
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(true)
-                .build()
-        )
+        val painter = if(imageUri == null || imageUri == ""){
+            rememberVectorPainter(placeholder)
+        }else{
+            rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUri)
+                    .crossfade(true)
+                    .error(R.drawable.error)
+                    .build()
+            )
+        }
         Image(
             painter = painter,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
+            contentDescription = "NetworkImage with url $imageUrl",
+            modifier = modifier.clickable { if(isEditEnabled)showPopup = true },
             contentScale = contentScale,
         )
     }
+
+    if(showPopup) {
+        ImageSelectionDialog(
+            onDismiss = { showPopup = false },
+            onImageSelected = {
+                if(it != null) {
+                    imageUri = it.toString()
+                    onImageSelected(it)
+                }
+            })
+    }
 }
+
 
 @Composable
 fun UploadImageField(modifier: Modifier = Modifier, label: String, imageUrl: String, onCLick: () -> Unit = {}) {
@@ -272,13 +305,13 @@ fun CommonContentCard(
             horizontalArrangement = Arrangement.Center,
         ) {
             if (imageUrl != null) {
-                NetworkImage(
+                CustomImage(
                     modifier = Modifier
                         .padding(end = 10.dp)
                         .size(50.dp),
                     imageUrl = imageUrl,
                     contentScale = ContentScale.FillBounds
-                )
+                ){}
             }
             Column(
                 modifier = Modifier
