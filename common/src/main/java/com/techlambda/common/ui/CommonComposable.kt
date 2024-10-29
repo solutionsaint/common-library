@@ -20,11 +20,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -343,6 +347,55 @@ fun CommonContentCard(
                     modifier = Modifier
                         .clickable { onEditClicked() }
                 )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun DropdownField(
+    label: String,
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(selectedOption) }
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(2.dp)) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            label = { Text(label) },
+            trailingIcon = {
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown,
+                        contentDescription = "Dropdown"
+                    )
+                }
+            },
+            readOnly = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        DropdownMenu(
+            modifier = Modifier.fillMaxWidth(),
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(text = {
+                    Text(modifier = Modifier.fillMaxWidth(), text = option)
+                }, onClick = {
+                    selectedText = option
+                    onOptionSelected(option)
+                    expanded = false
+                })
+
             }
         }
     }
