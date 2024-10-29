@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Common"
 include(":app")
 include(":common")
+include(":chat")
