@@ -62,6 +62,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.techlambda.attendanceapp.ui.common.ImageSelectionDialog
 import com.techlambda.common.R
+import com.techlambda.common.utils.ImageSelectionDialog
 
 @Composable
 fun CardText(
