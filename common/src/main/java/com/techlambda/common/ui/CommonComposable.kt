@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -71,7 +74,7 @@ fun CardText(
 ) {
     Text(
         text = text,
-        fontWeight = if(isBold) FontWeight.Bold else null,
+        fontWeight = if (isBold) FontWeight.Bold else null,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         color = MaterialTheme.colorScheme.primary
@@ -150,9 +153,9 @@ fun CustomImage(
     var showPopup by remember { mutableStateOf(false) }
     var imageUri by remember { mutableStateOf(imageUrl) }
     Box(modifier = modifier) {
-        val painter = if(imageUri == null || imageUri == ""){
+        val painter = if (imageUri == null || imageUri == "") {
             rememberVectorPainter(placeholder)
-        }else{
+        } else {
             rememberAsyncImagePainter(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imageUri)
@@ -164,16 +167,16 @@ fun CustomImage(
         Image(
             painter = painter,
             contentDescription = "NetworkImage with url $imageUrl",
-            modifier = modifier.clickable { if(isEditEnabled)showPopup = true },
+            modifier = modifier.clickable { if (isEditEnabled) showPopup = true },
             contentScale = contentScale,
         )
     }
 
-    if(showPopup) {
+    if (showPopup) {
         ImageSelectionDialog(
             onDismiss = { showPopup = false },
             onImageSelected = {
-                if(it != null) {
+                if (it != null) {
                     imageUri = it.toString()
                     onImageSelected(it)
                 }
@@ -183,7 +186,12 @@ fun CustomImage(
 
 
 @Composable
-fun UploadImageField(modifier: Modifier = Modifier, label: String, imageUrl: String, onCLick: () -> Unit = {}) {
+fun UploadImageField(
+    modifier: Modifier = Modifier,
+    label: String,
+    imageUrl: String,
+    onCLick: () -> Unit = {}
+) {
     Column(modifier = modifier) {
         Text(
             text = "Upload Image",
@@ -228,6 +236,7 @@ fun CustomTopAppBar(
     isAdmin: Boolean,
     backgroundColor: Color,
     navigateToAddScreen: () -> Unit,
+    navigateToSettingScreen: () -> Unit,
     navigateToBack: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -237,34 +246,52 @@ fun CustomTopAppBar(
                 modifier = Modifier.padding(horizontal = 10.dp),
                 title = {
                     Text(
-                        if(isListScreen) "List View & Add" else if (isEdit) "Edit" else "Add",
+                        if (isListScreen) "List View & Add" else if (isEdit) "Edit" else "Add",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                 },
                 actions = {
-                    if (isAdmin && isListScreen) {
-                        IconButton(modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(10.dp)
-                            )
-                            .background(color = backgroundColor),
-                            onClick = navigateToAddScreen
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Add",
-                                tint = Color.White
-                            )
-                        }
-                    }else {
-                        TextButton(onClick = { navigateToBack() }) {
-                            Text(text = "Cancel", fontWeight = FontWeight.SemiBold)
+                    Row {
+                        if (isAdmin && isListScreen) {
+                            IconButton(modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .background(color = backgroundColor),
+                                onClick = {
+                                    navigateToAddScreen()
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add",
+                                    tint = Color.White
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            IconButton(modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .background(color = backgroundColor),
+                                onClick = {
+                                    navigateToSettingScreen()
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = "Settings",
+                                    tint = Color.White
+                                )
+                            }
+                        } else {
+                            TextButton(onClick = { navigateToBack() }) {
+                                Text(text = "Cancel", fontWeight = FontWeight.SemiBold)
+                            }
                         }
                     }
                 },
                 navigationIcon = {
-                    if(!isListScreen) {
+                    if (!isListScreen) {
                         IconButton(onClick = { navigateToBack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -316,7 +343,7 @@ fun CommonContentCard(
                         .size(50.dp),
                     imageUrl = imageUrl,
                     contentScale = ContentScale.FillBounds
-                ){}
+                ) {}
             }
             Column(
                 modifier = Modifier
@@ -364,9 +391,11 @@ fun DropdownField(
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(selectedOption) }
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(2.dp)) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp)
+    ) {
         OutlinedTextField(
             value = selectedText,
             onValueChange = { selectedText = it },
