@@ -28,6 +28,7 @@ fun CommonListScreenContent(
     isAdmin: Boolean,
     topAppBarBackgroundColor: Color,
     navigateToAddScreen: () -> Unit,
+    navigateToSettingScreen: () -> Unit,
     name: String,
     uniqueId: String,
     context: Context,
@@ -42,6 +43,7 @@ fun CommonListScreenContent(
             isAdmin = isAdmin,
             backgroundColor = topAppBarBackgroundColor,
             navigateToAddScreen = navigateToAddScreen,
+            navigateToSettingScreen = navigateToSettingScreen,
             isListScreen = true,
             isEdit = false,
             navigateToBack = {}
