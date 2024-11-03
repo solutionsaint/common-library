@@ -1,5 +1,7 @@
 package com.techlambda.common.ui
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +27,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
@@ -66,6 +69,7 @@ import coil.request.ImageRequest
 import com.techlambda.attendanceapp.ui.common.ImageSelectionDialog
 import com.techlambda.common.R
 import com.techlambda.common.utils.ImageSelectionDialog
+import com.techlambda.common.utils.showToast
 
 @Composable
 fun CardText(
@@ -234,6 +238,7 @@ fun CustomTopAppBar(
     isListScreen: Boolean,
     isEdit: Boolean,
     isAdmin: Boolean,
+    context: Context,
     backgroundColor: Color,
     navigateToAddScreen: () -> Unit,
     navigateToSettingScreen: () -> Unit,
@@ -268,25 +273,48 @@ fun CustomTopAppBar(
                                     tint = Color.White
                                 )
                             }
-                            Spacer(modifier = Modifier.width(10.dp))
-                            IconButton(modifier = Modifier
-                                .clip(
-                                    RoundedCornerShape(10.dp)
-                                )
-                                .background(color = backgroundColor),
-                                onClick = {
-                                    navigateToSettingScreen()
-                                }) {
-                                Icon(
-                                    imageVector = Icons.Default.Settings,
-                                    contentDescription = "Settings",
-                                    tint = Color.White
-                                )
-                            }
-                        } else {
+                        } else if(!isListScreen) {
                             TextButton(onClick = { navigateToBack() }) {
                                 Text(text = "Cancel", fontWeight = FontWeight.SemiBold)
                             }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        IconButton(modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(10.dp)
+                            )
+                            .background(color = backgroundColor),
+                            onClick = {
+                                navigateToSettingScreen()
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = "Settings",
+                                tint = Color.White
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        IconButton(modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(10.dp)
+                            )
+                            .background(color = backgroundColor),
+                            onClick = {
+                                val deepLinkUri = Uri.parse("myapp://raise_enquiry/owner")
+                                val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
+
+                                // Check if there is an app that can handle this deep link
+                                if (intent.resolveActivity(context.packageManager) != null) {
+                                    context.startActivity(intent)
+                                } else {
+                                    context.showToast("App not install. Please install Enquiry app to raise enquiry")
+                                }
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Report,
+                                contentDescription = "Enquiry",
+                                tint = Color.White
+                            )
                         }
                     }
                 },

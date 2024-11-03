@@ -6,11 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.techlambda.common.ui.CommonListScreenContent
 import com.techlambda.common.ui.theme.CommonTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,10 +22,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             CommonTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    CommonListScreenContent(
+                        context = this,
+                        name = "List Screen",
+                        isAdmin = true,
+                        navigateToAddScreen = {},
+                        uniqueId = "ABCDEF",
+                        navigateToSettingScreen = {},
+                        list = listOf("Hello"),
+                        topAppBarBackgroundColor = MaterialTheme.colorScheme.primary
+                    ) {
+                        Greeting(
+                            name = "Android",
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }

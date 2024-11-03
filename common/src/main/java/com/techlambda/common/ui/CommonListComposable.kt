@@ -22,6 +22,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.techlambda.common.AdminHeader
 import com.techlambda.common.R
+import com.techlambda.common.utils.showToast
 
 @Composable
 fun CommonListScreenContent(
@@ -46,6 +47,7 @@ fun CommonListScreenContent(
             navigateToSettingScreen = navigateToSettingScreen,
             isListScreen = true,
             isEdit = false,
+            context = context,
             navigateToBack = {}
         ) { paddingValues ->
             Column {
@@ -59,8 +61,7 @@ fun CommonListScreenContent(
                         icon2 = R.drawable.ic_share,
                         onIcon1Clicked = {
                             clipboardManager.setText(AnnotatedString(uniqueId))
-                            Toast.makeText(context, "Copied to Clipboard", Toast.LENGTH_SHORT)
-                                .show()
+                            context.showToast("Copied to Clipboard")
                         },
                         onIcon2Clicked = {
                             shareCode = true
