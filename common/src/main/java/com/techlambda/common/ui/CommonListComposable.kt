@@ -69,8 +69,7 @@ fun CommonListScreenContent(
                     )
                 }
                 LazyColumn(
-                    Modifier
-                        .padding(horizontal = 10.dp)
+                    modifier = if(isAdmin) Modifier.padding(horizontal = 10.dp) else Modifier.padding(paddingValues)
                 ) {
                     items(list) {
                         itemContent(it)
