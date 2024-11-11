@@ -3,6 +3,7 @@ package com.techlambda.common.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -273,48 +274,48 @@ fun CustomTopAppBar(
                                     tint = Color.White
                                 )
                             }
-                        } else if(!isListScreen) {
+                        } else if (!isListScreen) {
                             TextButton(onClick = { navigateToBack() }) {
                                 Text(text = "Cancel", fontWeight = FontWeight.SemiBold)
                             }
                         }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        IconButton(modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(10.dp)
-                            )
-                            .background(color = backgroundColor),
-                            onClick = {
-                                navigateToSettingScreen()
-                            }) {
-                            Icon(
-                                imageVector = Icons.Default.Settings,
-                                contentDescription = "Settings",
-                                tint = Color.White
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(10.dp))
-                        IconButton(modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(10.dp)
-                            )
-                            .background(color = backgroundColor),
-                            onClick = {
-                                val deepLinkUri = Uri.parse("myapp://raise_enquiry/owner")
-                                val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
-
-                                // Check if there is an app that can handle this deep link
-                                if (intent.resolveActivity(context.packageManager) != null) {
-                                    context.startActivity(intent)
-                                } else {
-                                    context.showToast("App not install. Please install Enquiry app to raise enquiry")
-                                }
-                            }) {
-                            Icon(
-                                imageVector = Icons.Default.Report,
-                                contentDescription = "Enquiry",
-                                tint = Color.White
-                            )
+                        if (isListScreen) {
+                            Spacer(modifier = Modifier.width(10.dp))
+                            IconButton(modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .background(color = backgroundColor),
+                                onClick = {
+                                    navigateToSettingScreen()
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = "Settings",
+                                    tint = Color.White
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(10.dp))
+                            IconButton(modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .background(color = backgroundColor),
+                                onClick = {
+                                    val launchIntent =
+                                        context.packageManager.getLaunchIntentForPackage("com.techlambda.enquiry.dev")
+                                    if (launchIntent != null) {
+                                        context.startActivity(launchIntent)
+                                    } else {
+                                        context.showToast("App not installed. Please install enquiry app to raise enquiry.")
+                                    }
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Default.Report,
+                                    contentDescription = "Enquiry",
+                                    tint = Color.White
+                                )
+                            }
                         }
                     }
                 },

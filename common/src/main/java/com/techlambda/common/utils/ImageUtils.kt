@@ -115,7 +115,7 @@ fun ImageSelectionDialog(
             } else {
                 Toast.makeText(
                     context,
-                    "Please grant camera permission to capture photo using camera.",
+                    "Please grant image access to capture photo and uploads within the app.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -152,8 +152,12 @@ fun ImageSelectionDialog(
                     )
                     Button(
                         onClick = {
-                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                                == PackageManager.PERMISSION_GRANTED) {
+                            if (ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.CAMERA
+                                )
+                                == PackageManager.PERMISSION_GRANTED
+                            ) {
                                 onCaptureImageClick()
                             } else {
                                 permissionLauncher.launch(Manifest.permission.CAMERA)
