@@ -2,6 +2,7 @@ package com.techlambda.common.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -302,12 +303,25 @@ fun CustomTopAppBar(
                                 )
                                 .background(color = backgroundColor),
                                 onClick = {
-                                    val launchIntent =
-                                        context.packageManager.getLaunchIntentForPackage("com.techlambda.enquiry.dev")
-                                    if (launchIntent != null) {
-                                        context.startActivity(launchIntent)
-                                    } else {
-                                        context.showToast("App not installed. Please install enquiry app to raise enquiry.")
+                                    val packageManager = context.packageManager
+                                    try {
+                                        // Check if the app is installed
+                                        packageManager.getPackageInfo("com.techlambda.enquiry.dev", PackageManager.GET_ACTIVITIES)
+
+                                        // Create an Intent with the deep link URI
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://raise_enquiry/owner")).apply {
+                                            setPackage("com.techlambda.enquiry.dev")
+                                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        }
+
+                                        // Launch the target app with the deep link
+                                        context.startActivity(intent)
+                                    } catch (e: PackageManager.NameNotFoundException) {
+                                        // The target app is not installed
+                                        Toast.makeText(context, "App is not installed. Please install enquiry app", Toast.LENGTH_SHORT).show()
+                                    } catch (e: Exception) {
+                                        Toast.makeText(context, "Unable to open the app", Toast.LENGTH_SHORT).show()
+                                        e.printStackTrace()
                                     }
                                 }) {
                                 Icon(
