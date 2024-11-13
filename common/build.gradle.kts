@@ -59,8 +59,12 @@ dependencies {
     implementation(libs.androidx.material3.icons)
     implementation(libs.androidx.material3.icons.extended)
 
+    //Coil
     implementation(libs.coil.compose)
 
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     //Serialization
     implementation(libs.ktor.serialization.kotlinx.json)
 }
@@ -72,7 +76,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.solutionsaint"
                 artifactId = "common"
-                version = "1.1.3"
+                version = "1.1.6"
             }
         }
     }

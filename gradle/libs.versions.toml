@@ -12,6 +12,9 @@ appcompat = "1.7.0"
 material = "1.12.0"
 coilCompose = "2.6.0"
 ktor = "2.3.12"
+retrofit = "2.11.0"
+converterGson = "2.11.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +37,9 @@ androidx-material3_icons = { group = "androidx.compose.material", name = "materi
 androidx-material3_icons_extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
