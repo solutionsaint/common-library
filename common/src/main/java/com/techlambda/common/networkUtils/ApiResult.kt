@@ -1,4 +1,4 @@
-package com.techlambda.common.utils
+package com.techlambda.common.networkUtils
 
 // Define a sealed class to represent the result of the API call
 sealed class ApiResponse<out T> {

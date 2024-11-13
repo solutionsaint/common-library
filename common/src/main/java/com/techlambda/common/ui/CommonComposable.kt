@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -621,4 +622,29 @@ fun TimePickerDialog(
             }
         }
     }
+}
+
+@Composable
+fun ExitDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = { Text(text = "Exit App") },
+        text = { Text("Are you sure you want to exit the app?") },
+        confirmButton = {
+            Button(
+                onClick = {
+                   onConfirm()
+                }
+            ) {
+                Text("Yes")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = { onDismiss() }
+            ) {
+                Text("No")
+            }
+        }
+    )
 }

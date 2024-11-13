@@ -1,7 +1,6 @@
 package com.techlambda.common.networkUtils
 
 import com.google.gson.JsonParser
-import com.techlambda.common.utils.ApiResponse
 import retrofit2.Response
 import java.io.IOException
 import java.net.UnknownHostException
