@@ -37,6 +37,7 @@ androidx-material3_icons = { group = "androidx.compose.material", name = "materi
 androidx-material3_icons_extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 

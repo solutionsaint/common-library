@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.converter.gson)
     //Serialization
     implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.serialization)
 }
 
 afterEvaluate {
@@ -76,7 +77,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.solutionsaint"
                 artifactId = "common"
-                version = "1.1.7"
+                version = "1.1.8"
             }
         }
     }
